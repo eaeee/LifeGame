@@ -4,6 +4,17 @@ import java.util.Random;
 
 public class Life {
     private  boolean[][] lifePole;
+    private int years;
+
+    public boolean isEnd() {
+        return isEnd;
+    }
+
+    public void setEnd(boolean end) {
+        isEnd = end;
+    }
+
+    private boolean isEnd;
 
     public boolean[][] getLifePole() {
         return lifePole;
@@ -18,7 +29,8 @@ public class Life {
     public Life(int length) {
         this.lifePole = new boolean[length][length];
         this.random = new Random();
-
+        this.years = 0;
+        isEnd = false;
         for(int x =0; x<lifePole.length; x++) {
             for(int y=0;y<lifePole[x].length;y++) {
                 lifePole[x][y]=random.nextBoolean();
@@ -28,6 +40,7 @@ public class Life {
 
     public boolean[][] getNextGeneration() {
         boolean[][] oldPole = this.getLifePole();
+        years++;
         int length = oldPole.length;
         boolean[][] newGenPole = new boolean[length][length];
 
@@ -37,6 +50,9 @@ public class Life {
             }
         }
         this.setLifePole(newGenPole);
+        if(this.years % 10 == 0){
+            checkIsEnd(oldPole);
+        }
         return newGenPole;
     }
 
@@ -55,7 +71,7 @@ public class Life {
 
         for(int stepX: steps){
             for (int stepY: steps){
-                if(stepX+stepY==0){
+                if(stepX==0 && stepY==0){
                     continue;
                 }
                 if((0<=x+stepX&&x+stepX<length) && (0<=y+stepY&&y+stepY<length) && pole[x+stepX][y+stepY]){
@@ -64,5 +80,15 @@ public class Life {
             }
         }
         return count;
+    }
+
+    private void checkIsEnd(boolean[][]old){
+        boolean isSame = true;
+        for (int i=0; i<old.length; i++){
+            for (int j=0; j<old.length; j++){
+                isSame = isSame && old[i][j] == this.getLifePole()[i][j];
+            }
+        }
+        this.setEnd(isSame);
     }
 }

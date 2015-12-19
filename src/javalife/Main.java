@@ -12,8 +12,9 @@ import java.util.concurrent.TimeUnit;
 
 public class Main extends Application {
 
-    final static int chunkSize = 10;
+    final static int chunkSize = 5;
     final static int chunkCount = 100;
+    final static int fps =10;
     final static int canvasSize = chunkSize*chunkCount;
 
     @Override
@@ -43,8 +44,11 @@ public class Main extends Application {
             @Override
             public void run() {
                 Main.DrawNextFrap(life.getNextGeneration(), gc);
+                if(life.isEnd()){
+                    System.exit(0);
+                }
             }
-        }, 0, 1, TimeUnit.SECONDS);
+        }, 0, 1000/fps, TimeUnit.MILLISECONDS);
     }
 
     private static void DrawNextFrap(boolean[][] pole,GraphicsContext gc){
